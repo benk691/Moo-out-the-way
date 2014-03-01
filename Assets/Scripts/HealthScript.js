@@ -1,27 +1,20 @@
 ﻿#pragma strict
 
-var hp = -1;
-var isEnemy = true;
-
-function Damage(damageCount : int)
-{
-	hp -= damageCount;
-	if(hp <= 0)
+function Damage() {
+	var scale = gameObject.transform.localScale;
+	gameObject.transform.localScale = new Vector3(scale.x/2,scale.y/2,scale.z/2);
+	if(scale.x < .25)
 	{
 		Destroy(gameObject);
 	}
 }
 
-function OnTriggerEnter2D(collider : Collider2D)
+function OnTriggerEnter2D(otherCollider : Collider2D)
 {
-	var shot = collider.gameObject.GetComponent(ShotScript);
+	var shot = otherCollider.gameObject.GetComponent(ShotScript);
 	if(shot != null)
 	{
-		if(shot.isEnemyShot != isEnemy)
-		{
-			Damage(shot.damage);
-
-			Destroy(shot.gameObject);
-		}
+		Damage();
 	}
+	Destroy(shot.gameObject);
 }
